@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, HelloAnroidGpsActivity!</string>
+    <string name="app_name">LocAALTOn</string>
+    <string name="gpsButton">Start Updates</string>
+    <string name="networkButton">Network</string>
+    <string name="stopButton">Stop Updates</string>
+    <string name="debug">Debug Info</string>
+    
+</resources>

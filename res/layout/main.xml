@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+
+
+    <EditText
+        android:id="@+id/editTextShowLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:lines="10"
+        android:text="My location is..." 
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="30dip"/>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/buttonGetLocation"
+            android:layout_width="0dip"
+            android:layout_height="60dip"
+            android:layout_weight="1"
+            android:layout_marginTop="10dip"          
+            android:src="@drawable/world"
+            android:background="@color/Green"
+            android:textSize="10dp"
+            android:textStyle="bold" 
+            android:layout_marginLeft="17dip"
+            android:layout_marginRight="10dip"/>
+
+        <ImageButton
+            android:id="@+id/stopUpdates"
+            android:layout_width="0dip"
+            android:layout_height="60dip"
+            android:layout_weight="1"
+            android:layout_marginTop="10dip"
+            android:src="@drawable/cross"
+            android:background="@color/Red"
+            android:textSize="10dip"
+            android:textStyle="bold"
+            android:layout_marginRight="17dip"
+            android:layout_marginLeft="10dip"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/batteryBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="17dip"
+        android:layout_marginRight="17dip"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
