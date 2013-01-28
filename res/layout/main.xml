@@ -4,7 +4,36 @@
     android:orientation="vertical" >
 
 
-
+	<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="10dip">
+        
+    <EditText
+        android:id="@+id/editServerIp"
+        android:layout_width="0dip"
+        android:layout_weight="2"
+        android:layout_height="fill_parent"
+        android:gravity="top"
+        android:lines="2"
+        android:text="10.100.3.236"/>
+    
+    <ImageButton
+            android:id="@+id/buttonServerConnect"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"      
+            android:src="@drawable/con"
+            android:background="@color/SkyBlue"
+            android:textSize="10dp"
+            android:layout_marginLeft="15dip"
+            android:textStyle="bold"/>    
+    </LinearLayout>
+    
     <EditText
         android:id="@+id/editTextShowLocation"
         android:layout_width="match_parent"
@@ -14,7 +43,7 @@
         android:text="My location is..." 
         android:layout_marginLeft="15dip"
         android:layout_marginRight="15dip"
-        android:layout_marginTop="30dip"/>
+        android:layout_marginTop="10dip"/>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

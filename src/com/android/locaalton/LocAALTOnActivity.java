@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.URI;
+
+import org.json.JSONArray;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +20,7 @@ import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,9 +31,13 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.codebutler.android_websockets.SocketIOClient;
+
 public class LocAALTOnActivity extends Activity {
 
+	private EditText serverIp;
 	private EditText editTextShowLocation;
+	private ImageButton buttonServerConnect;
 	private ImageButton buttonGetLocation;
 	private ImageButton stopUpdates;
 	private ProgressBar batteryBar;
@@ -44,6 +53,9 @@ public class LocAALTOnActivity extends Activity {
 	private boolean readable = isExternalStorageWritable();
     private FileOutputStream fOut;
     private OutputStreamWriter myOutWriter;
+    private String serverIpAddress = "";
+    private boolean connected = false;
+    
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -51,6 +63,11 @@ public class LocAALTOnActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.main);
+		
+		serverIp = (EditText) findViewById(R.id.editServerIp);
+		buttonServerConnect = (ImageButton) findViewById(R.id.buttonServerConnect);
+		buttonServerConnect.setOnClickListener(connectListener);
+		
 		editTextShowLocation = (EditText) findViewById(R.id.editTextShowLocation);
 		
 		buttonGetLocation = (ImageButton) findViewById(R.id.buttonGetLocation);
@@ -65,6 +82,7 @@ public class LocAALTOnActivity extends Activity {
 			public void onClick(View v) {
 				stopUpdatesClick();
 			}
+			
 		});
 		batteryBar = (ProgressBar) findViewById(R.id.batteryBar);
 		
@@ -111,7 +129,7 @@ public class LocAALTOnActivity extends Activity {
 		       provider = 2;
 		       return true;
 	        case R.id.btInfo:
-	           Toast.makeText(getApplicationContext(), "LocAALTOn v 1.0\nCoded by Javier P√©rez", Toast.LENGTH_SHORT).show();
+	           Toast.makeText(getApplicationContext(), "LocAALTOn v 1.0\nCoded by Javier Pérez", Toast.LENGTH_SHORT).show();
 	           return true;
 	        case R.id.d0:
 	           distance = 0;
@@ -300,6 +318,112 @@ public class LocAALTOnActivity extends Activity {
 		int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 		boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
 		return isCharging;
-	}	
+	}
+	
+	private OnClickListener connectListener = new OnClickListener() {
+		 
+        @Override
+        public void onClick(View v) {
+            if (!connected) {
+                serverIpAddress = serverIp.getText().toString();
+                if (!serverIpAddress.equals("")) {
+                    Thread cThread = new Thread(new ClientThread());
+                    cThread.start();
+                }
+            }
+        }
+    };
+    
+    public class ClientThread implements Runnable {
+    	 
+        public void run() {
+            try {
+                InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
+                Log.d("ClientActivity", "C: Connecting...");              
+// SOCKET.IO
+                SocketIOClient client;
+                client = new SocketIOClient(URI.create("http://"+serverIpAddress+":3000"), new SocketIOClient.Handler() {
+                    @Override
+                    public void onConnect() {
+                        Log.d("ClientActivity", "Connected!");
+                    }
+                    
+                    @Override
+                    public void on(String event, JSONArray arguments) {
+                        Log.d("ClientActivity", String.format("Got event %s: %s", event, arguments.toString())); 
+                    }
+
+                    @Override
+                    public void onDisconnect(int code, String reason) {
+                        Log.d("ClientActivity", String.format("Disconnected! Code: %d Reason: %s", code, reason));
+                    }
+
+                    @Override
+                    public void onError(Exception error) {
+                        Log.e("ClientActivity", "Error!", error);
+                    }
+                });            
+                client.connect();
+                while(true){
+	                Log.d("ClientActivity", "AAAAAAAAA"); 
+	                JSONArray arguments = new JSONArray();
+	                arguments.put("first argument");
+	//                JSONObject second = new JSONObject();
+	//                second.put("dictionary", true);
+	//                arguments.put(second);
+	//                arguments.put("second argument");
+	//                arguments.put("third argument");
+	//                arguments.put("fourth argument");
+	                client.emit("hello", arguments);
+	                Log.d("ClientActivity", "BBBBBBBBBB");
+                }
+//                client.disconnect();
+//                Log.d("ClientActivity", "CCCCCCCC"); 
+// WebSocket
+//                List<BasicNameValuePair> extraHeaders = Arrays.asList(
+//                	    new BasicNameValuePair("Cookie", "session=abcd")
+//                	);
+//
+//                 	WebSocketClient client = new WebSocketClient(URI.create("wss://irccloud.com"), new WebSocketClient.Handler() {
+//                	    @Override
+//                	    public void onConnect() {
+//                	        Log.d(TAG, "Connected!");
+//                	    }
+//
+//                	    @Override
+//                	    public void onMessage(String message) {
+//                	        Log.d(TAG, String.format("Got string message! %s", message));
+//                	    }
+//
+//                	    @Override
+//                	    public void onMessage(byte[] data) {
+//                	        Log.d(TAG, String.format("Got binary message! %s", toHexString(data)));
+//                	    }
+//
+//                	    @Override
+//                	    public void onDisconnect(int code, String reason) {
+//                	        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+//                	    }
+//
+//                	    @Override
+//                	    public void onError(Exception error) {
+//                	        Log.e(TAG, "Error!", error);
+//                	    }
+//                	}, extraHeaders);
+//
+//                	client.connect();
+//
+//                	// Later… 
+//                	client.send("hello!");
+//                	client.send(new byte[] { (byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF });
+//                	client.disconnect();
+                
+                
+            } catch (Exception e) {
+                Log.e("ClientActivity", "C: Error", e);
+                connected = false;
+            }
+        }
+    }
 }
 
