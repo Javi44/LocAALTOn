@@ -364,7 +364,6 @@ public class LocAALTOnActivity extends Activity {
                     }
                 });            
                 client.connect();
-                while(true){
 	                Log.d("ClientActivity", "AAAAAAAAA"); 
 	                JSONArray arguments = new JSONArray();
 	                arguments.put("first argument");
@@ -376,38 +375,37 @@ public class LocAALTOnActivity extends Activity {
 	//                arguments.put("fourth argument");
 	                client.emit("hello", arguments);
 	                Log.d("ClientActivity", "BBBBBBBBBB");
-                }
-//                client.disconnect();
-//                Log.d("ClientActivity", "CCCCCCCC"); 
+                client.disconnect();
+                Log.d("ClientActivity", "CCCCCCCC"); 
 // WebSocket
 //                List<BasicNameValuePair> extraHeaders = Arrays.asList(
 //                	    new BasicNameValuePair("Cookie", "session=abcd")
 //                	);
 //
-//                 	WebSocketClient client = new WebSocketClient(URI.create("wss://irccloud.com"), new WebSocketClient.Handler() {
+//                 	WebSocketClient client = new WebSocketClient(URI.create("wss://10.100.3.236"), new Listener() {
 //                	    @Override
 //                	    public void onConnect() {
-//                	        Log.d(TAG, "Connected!");
+//                	        Log.d("WebSocketClient", "Connected!");
 //                	    }
 //
 //                	    @Override
 //                	    public void onMessage(String message) {
-//                	        Log.d(TAG, String.format("Got string message! %s", message));
+//                	        Log.d("WebSocketClient", String.format("Got string message! %s", message));
 //                	    }
 //
 //                	    @Override
 //                	    public void onMessage(byte[] data) {
-//                	        Log.d(TAG, String.format("Got binary message! %s", toHexString(data)));
+//                	        Log.d("WebSocketClient", String.format("Got binary message! %s", data));
 //                	    }
 //
 //                	    @Override
 //                	    public void onDisconnect(int code, String reason) {
-//                	        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+//                	        Log.d("WebSocketClient", String.format("Disconnected! Code: %d Reason: %s", code, reason));
 //                	    }
 //
 //                	    @Override
 //                	    public void onError(Exception error) {
-//                	        Log.e(TAG, "Error!", error);
+//                	        Log.e("WebSocketClient", "Error!", error);
 //                	    }
 //                	}, extraHeaders);
 //
