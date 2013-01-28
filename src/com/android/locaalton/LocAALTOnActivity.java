@@ -55,8 +55,7 @@ public class LocAALTOnActivity extends Activity {
     private OutputStreamWriter myOutWriter;
     private String serverIpAddress = "";
     private boolean connected = false;
-    
-
+  
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{	
@@ -339,44 +338,55 @@ public class LocAALTOnActivity extends Activity {
         public void run() {
             try {
                 InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
-                Log.d("ClientActivity", "C: Connecting...");              
+                Log.d("ClientActivity", "C: Connecting...");
+                
+                
+            } catch (Exception e) {
+                Log.e("ClientActivity", "C: Error", e);
+                connected = false;
+            }
+        }
+    }
+}           
+                
+                
 // SOCKET.IO
-                SocketIOClient client;
-                client = new SocketIOClient(URI.create("http://"+serverIpAddress+":3000"), new SocketIOClient.Handler() {
-                    @Override
-                    public void onConnect() {
-                        Log.d("ClientActivity", "Connected!");
-                    }
-                    
-                    @Override
-                    public void on(String event, JSONArray arguments) {
-                        Log.d("ClientActivity", String.format("Got event %s: %s", event, arguments.toString())); 
-                    }
-
-                    @Override
-                    public void onDisconnect(int code, String reason) {
-                        Log.d("ClientActivity", String.format("Disconnected! Code: %d Reason: %s", code, reason));
-                    }
-
-                    @Override
-                    public void onError(Exception error) {
-                        Log.e("ClientActivity", "Error!", error);
-                    }
-                });            
-                client.connect();
-	                Log.d("ClientActivity", "AAAAAAAAA"); 
-	                JSONArray arguments = new JSONArray();
-	                arguments.put("first argument");
-	//                JSONObject second = new JSONObject();
-	//                second.put("dictionary", true);
-	//                arguments.put(second);
-	//                arguments.put("second argument");
-	//                arguments.put("third argument");
-	//                arguments.put("fourth argument");
-	                client.emit("hello", arguments);
-	                Log.d("ClientActivity", "BBBBBBBBBB");
-                client.disconnect();
-                Log.d("ClientActivity", "CCCCCCCC"); 
+//                SocketIOClient client;
+//                client = new SocketIOClient(URI.create("http://"+serverIpAddress+":3000"), new SocketIOClient.Handler() {
+//                    @Override
+//                    public void onConnect() {
+//                        Log.d("ClientActivity", "Connected!");
+//                    }
+//                    
+//                    @Override
+//                    public void on(String event, JSONArray arguments) {
+//                        Log.d("ClientActivity", String.format("Got event %s: %s", event, arguments.toString())); 
+//                    }
+//
+//                    @Override
+//                    public void onDisconnect(int code, String reason) {
+//                        Log.d("ClientActivity", String.format("Disconnected! Code: %d Reason: %s", code, reason));
+//                    }
+//
+//                    @Override
+//                    public void onError(Exception error) {
+//                        Log.e("ClientActivity", "Error!", error);
+//                    }
+//                });            
+//                client.connect();
+//	                Log.d("ClientActivity", "AAAAAAAAA"); 
+//	                JSONArray arguments = new JSONArray();
+//	                arguments.put("first argument");
+//	//                JSONObject second = new JSONObject();
+//	//                second.put("dictionary", true);
+//	//                arguments.put(second);
+//	//                arguments.put("second argument");
+//	//                arguments.put("third argument");
+//	//                arguments.put("fourth argument");
+//	                client.emit("hello", arguments);
+//	                Log.d("ClientActivity", "BBBBBBBBBB");
+//                client.disconnect();
+//                Log.d("ClientActivity", "CCCCCCCC"); 
 // WebSocket
 //                List<BasicNameValuePair> extraHeaders = Arrays.asList(
 //                	    new BasicNameValuePair("Cookie", "session=abcd")
@@ -417,11 +427,5 @@ public class LocAALTOnActivity extends Activity {
 //                	client.disconnect();
                 
                 
-            } catch (Exception e) {
-                Log.e("ClientActivity", "C: Error", e);
-                connected = false;
-            }
-        }
-    }
-}
+            
 
