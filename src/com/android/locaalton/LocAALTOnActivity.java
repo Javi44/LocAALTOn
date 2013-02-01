@@ -1,13 +1,19 @@
 package com.android.locaalton;
 
+import io.socket.IOAcknowledge;
+import io.socket.IOCallback;
+import io.socket.SocketIO;
+import io.socket.SocketIOException;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,7 +37,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.codebutler.android_websockets.SocketIOClient;
 
 public class LocAALTOnActivity extends Activity {
 
@@ -39,7 +44,7 @@ public class LocAALTOnActivity extends Activity {
 	private EditText editTextShowLocation;
 	private ImageButton buttonServerConnect;
 	private ImageButton buttonGetLocation;
-	private ImageButton stopUpdates;
+	private ImageButton buttonStopUpdates;
 	private ProgressBar batteryBar;
 	private int cont = 0;
 	private LocationManager locManager;
@@ -51,9 +56,11 @@ public class LocAALTOnActivity extends Activity {
 	private boolean gpsFlag = false;
 	private Location mobileLocation;
 	private boolean readable = isExternalStorageWritable();
+    private String currentDateTimeString;
     private FileOutputStream fOut;
     private OutputStreamWriter myOutWriter;
     private String serverIpAddress = "";
+    private SocketIO socket = null;
     private boolean connected = false;
   
 	@Override
@@ -76,8 +83,8 @@ public class LocAALTOnActivity extends Activity {
 			}
 		});
 		
-		stopUpdates = (ImageButton) findViewById(R.id.stopUpdates);
-		stopUpdates.setOnClickListener(new OnClickListener() {
+		buttonStopUpdates = (ImageButton) findViewById(R.id.buttonStopUpdates);
+		buttonStopUpdates.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				stopUpdatesClick();
 			}
@@ -85,12 +92,16 @@ public class LocAALTOnActivity extends Activity {
 		});
 		batteryBar = (ProgressBar) findViewById(R.id.batteryBar);
 		
+		Date cDate = new Date();
+		currentDateTimeString = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
+		
 		locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		if(readable)
 		{		
 			try
 			{
-				fOut = new FileOutputStream("/sdcard/LocationData.txt",true);
+//				fOut = new FileOutputStream("/sdcard/LocationData.txt",true);
+				fOut = new FileOutputStream("/sdcard/locations/"+currentDateTimeString+".txt",true);
 				myOutWriter= new OutputStreamWriter(fOut);			
 			}
 			catch (FileNotFoundException e)
@@ -208,18 +219,22 @@ public class LocAALTOnActivity extends Activity {
 					float speed = mobileLocation.getSpeed();
 					long time = mobileLocation.getTime();
 					String provider = mobileLocation.getProvider();
-					String editS = "Longitude: "+longitude+"\nLatitude: "+latitude+"\nAltitude: "
+					String decoratedS = "Longitude: "+longitude+"\nLatitude: "+latitude+"\nAltitude: "
 						+altitude+"\nAccuracy: "+accuracy+"\nSpeed: "+speed+"\nTime: "+time+
 						"\nProvider: "+provider+"\nCharging: "+isCharging() +"\nSoC: "+
 						(int)(batteryLvl()*100)+"%\nCont: "+cont;	
 						batteryBar.setProgress((int)(batteryLvl()*100));
-						String sdString = "<"+cont+","+longitude+","+latitude+","+altitude+","
+						String notDecoratedS = "<"+cont+","+longitude+","+latitude+","+altitude+","
 						+accuracy+","+speed+","+time+">\n";
-					editTextShowLocation.setText(editS);
+					editTextShowLocation.setText(decoratedS);
 					if(readable)
 					{
-						writeToSDFile(sdString);
-					}		
+						writeToSDFile(notDecoratedS);
+					}
+					if(connected)
+					{
+						socket.emit("location", notDecoratedS);
+					}
 				}
 				else
 				{
@@ -337,9 +352,51 @@ public class LocAALTOnActivity extends Activity {
     	 
         public void run() {
             try {
-                InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
                 Log.d("ClientActivity", "C: Connecting...");
-                
+                socket = new SocketIO("http://"+serverIpAddress+":3000/");
+                socket.connect(new IOCallback() {
+                    @Override
+                    public void onMessage(JSONObject json, IOAcknowledge ack) {
+                        try {
+                            System.out.println("Server said:" + json.toString(2));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onMessage(String data, IOAcknowledge ack) {
+                        System.out.println("Server said: " + data);
+                    }
+
+                    @Override
+                    public void onError(SocketIOException socketIOException) {
+                        System.out.println("an Error occured");
+                        socketIOException.printStackTrace();
+                    }
+
+                    @Override
+                    public void onDisconnect() {
+                        System.out.println("Connection terminated.");                        
+                    }
+
+                    @Override
+                    public void onConnect() {
+                        System.out.println("Connection established");
+                    }
+
+                    @Override
+                    public void on(String event, IOAcknowledge ack, Object... args) {
+                        System.out.println("Server triggered event '" + event + "'");
+                    }
+                });
+
+                // This line is cached until the connection is established.
+                //socket.send("Hello Server!");
+                connected = true;
+                Message msg = new Message();
+                Log.d("ClientActivity",msg.encodeEXI("test.xml", "test.exi"));
+                socket.emit("location", msg.writeXml());
                 
             } catch (Exception e) {
                 Log.e("ClientActivity", "C: Error", e);
@@ -347,85 +404,4 @@ public class LocAALTOnActivity extends Activity {
             }
         }
     }
-}           
-                
-                
-// SOCKET.IO
-//                SocketIOClient client;
-//                client = new SocketIOClient(URI.create("http://"+serverIpAddress+":3000"), new SocketIOClient.Handler() {
-//                    @Override
-//                    public void onConnect() {
-//                        Log.d("ClientActivity", "Connected!");
-//                    }
-//                    
-//                    @Override
-//                    public void on(String event, JSONArray arguments) {
-//                        Log.d("ClientActivity", String.format("Got event %s: %s", event, arguments.toString())); 
-//                    }
-//
-//                    @Override
-//                    public void onDisconnect(int code, String reason) {
-//                        Log.d("ClientActivity", String.format("Disconnected! Code: %d Reason: %s", code, reason));
-//                    }
-//
-//                    @Override
-//                    public void onError(Exception error) {
-//                        Log.e("ClientActivity", "Error!", error);
-//                    }
-//                });            
-//                client.connect();
-//	                Log.d("ClientActivity", "AAAAAAAAA"); 
-//	                JSONArray arguments = new JSONArray();
-//	                arguments.put("first argument");
-//	//                JSONObject second = new JSONObject();
-//	//                second.put("dictionary", true);
-//	//                arguments.put(second);
-//	//                arguments.put("second argument");
-//	//                arguments.put("third argument");
-//	//                arguments.put("fourth argument");
-//	                client.emit("hello", arguments);
-//	                Log.d("ClientActivity", "BBBBBBBBBB");
-//                client.disconnect();
-//                Log.d("ClientActivity", "CCCCCCCC"); 
-// WebSocket
-//                List<BasicNameValuePair> extraHeaders = Arrays.asList(
-//                	    new BasicNameValuePair("Cookie", "session=abcd")
-//                	);
-//
-//                 	WebSocketClient client = new WebSocketClient(URI.create("wss://10.100.3.236"), new Listener() {
-//                	    @Override
-//                	    public void onConnect() {
-//                	        Log.d("WebSocketClient", "Connected!");
-//                	    }
-//
-//                	    @Override
-//                	    public void onMessage(String message) {
-//                	        Log.d("WebSocketClient", String.format("Got string message! %s", message));
-//                	    }
-//
-//                	    @Override
-//                	    public void onMessage(byte[] data) {
-//                	        Log.d("WebSocketClient", String.format("Got binary message! %s", data));
-//                	    }
-//
-//                	    @Override
-//                	    public void onDisconnect(int code, String reason) {
-//                	        Log.d("WebSocketClient", String.format("Disconnected! Code: %d Reason: %s", code, reason));
-//                	    }
-//
-//                	    @Override
-//                	    public void onError(Exception error) {
-//                	        Log.e("WebSocketClient", "Error!", error);
-//                	    }
-//                	}, extraHeaders);
-//
-//                	client.connect();
-//
-//                	// Later… 
-//                	client.send("hello!");
-//                	client.send(new byte[] { (byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF });
-//                	client.disconnect();
-                
-                
-            
-
+}

@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:orientation="vertical" 
+    android:background="@drawable/light">
 
 	<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +21,7 @@
         android:layout_height="fill_parent"
         android:gravity="top"
         android:lines="2"
-        android:text="10.100.3.236"/>
+        android:text="perezj1-web.cs.hut.fi"/>
     
     <ImageButton
             android:id="@+id/buttonServerConnect"
@@ -28,8 +29,8 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"      
             android:src="@drawable/con"
-            android:background="@color/SkyBlue"
-            android:textSize="10dp"
+            android:contentDescription="@string/buttonServerConnect"
+            android:background="@drawable/styleconbutton"
             android:layout_marginLeft="15dip"
             android:textStyle="bold"/>    
     </LinearLayout>
@@ -58,6 +59,7 @@
             android:layout_weight="1"
             android:layout_marginTop="10dip"          
             android:src="@drawable/world"
+            android:contentDescription="@string/buttonGetLocation"
             android:background="@color/Green"
             android:textSize="10dp"
             android:textStyle="bold" 
@@ -65,14 +67,14 @@
             android:layout_marginRight="10dip"/>
 
         <ImageButton
-            android:id="@+id/stopUpdates"
+            android:id="@+id/buttonStopUpdates"
             android:layout_width="0dip"
             android:layout_height="60dip"
             android:layout_weight="1"
             android:layout_marginTop="10dip"
             android:src="@drawable/cross"
+            android:contentDescription="@string/buttonStopUpdates"
             android:background="@color/Red"
-            android:textSize="10dip"
             android:textStyle="bold"
             android:layout_marginRight="17dip"
             android:layout_marginLeft="10dip"/>
