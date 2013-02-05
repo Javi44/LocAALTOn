@@ -9,5 +9,15 @@
     <string name="buttonServerConnect">Connect to the server</string>
     <string name="buttonGetLocation">Select location provider</string>
     <string name="buttonStopUpdates">Stop location updates</string>
+    <string name="prefProvider">Location provider</string>
+    <string name="prefProviderSum">Select preferred location provider</string>
+    <string name="titleGPS">GPS</string>
+    <string name="titleNetwork">Network</string>
+    <string name="titleDistance">Distance</string>
+    <string name="titleMinTime">Time</string>
+    <string name="gpsProviderSum">Get locations using the GPS</string>
+    <string name="networkProviderSum">Get locations using the network</string>
+    <string name="distanceSum">Choose distance between samples (m)</string>
+    <string name="minTimeSum">Choose minimum time between samples (s)</string>
     
 </resources>

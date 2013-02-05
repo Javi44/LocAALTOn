@@ -12,8 +12,6 @@
             	<item android:id="@+id/bothProvidersButton"
                   android:title="Both Providers"></item>
             </menu>
-            
-            
       </item>
       <item
             android:id="@+id/btConfig2"

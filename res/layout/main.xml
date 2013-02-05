@@ -45,8 +45,16 @@
         android:layout_marginLeft="15dip"
         android:layout_marginRight="15dip"
         android:layout_marginTop="10dip"/>
-
+	<ProgressBar
+        android:id="@+id/batteryBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dip"
+        android:layout_marginLeft="17dip"
+        android:layout_marginRight="17dip"
+        android:layout_height="wrap_content" />
     <LinearLayout
+        android:layout_marginTop="10dip"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -79,14 +87,29 @@
             android:layout_marginRight="17dip"
             android:layout_marginLeft="10dip"/>
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/batteryBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dip"
-        android:layout_marginLeft="17dip"
-        android:layout_marginRight="17dip"
-        android:layout_height="wrap_content" />
-
+	<TextView android:id="@+id/textStatus"
+	     android:textSize="7sp"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_marginTop="10dip"
+         android:layout_marginLeft="17dip"
+	     android:text="Status changes..." />
+	
+	<TextView android:id="@+id/textSent"
+	     android:textSize="7sp"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_marginTop="10dip"
+         android:layout_marginLeft="17dip"
+	     android:text="Messages sent..." />
+	
+	<ImageButton
+	  android:id="@+id/btnPrefs"
+	  android:layout_width="50dip"
+	  android:layout_height="wrap_content"
+	  android:src="@drawable/conf"
+	  android:layout_marginTop="15dip"
+	  android:layout_marginLeft="16dip"
+	  android:layout_marginRight="16dip"
+	  android:layout_gravity="right" />
 </LinearLayout>

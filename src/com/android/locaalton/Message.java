@@ -56,10 +56,7 @@ public class Message {
 	    } 
 	} 
 	
-	public String encodeEXI(String sourceFile, String destinationFile) 
-	    throws FileNotFoundException, IOException, ClassNotFoundException, TransmogrifierException,
-	    EXIOptionsException 
-	{
+	public String encodeEXI(double latitude, double longitude){
 //	    FileInputStream in = null;
 //	    FileOutputStream out = null;
 	    GrammarCache grammarCache;
@@ -89,15 +86,16 @@ public class Message {
 	
 	//6. Encode the input stream.
 	        
-	        String input2= "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><v2gci_d:V2G_Message xmlns:v2gci_b='urn:iso:15118:2:2010:MsgBody' xmlns:xmlsig='http://www.w3.org/2000/09/xmldsig#' xmlns:v2gci_d='urn:iso:15118:2:2010:MsgDef' xmlns:v2gci_t='urn:iso:15118:2:2010:MsgDataTypes' xmlns:v2gci_h='urn:iso:15118:2:2010:MsgHeader'><v2gci_d:Header><v2gci_h:SessionInformation><v2gci_t:SessionID>0000000000000000</v2gci_t:SessionID></v2gci_h:SessionInformation></v2gci_d:Header><v2gci_d:Body><v2gci_b:SessionSetupReq><v2gci_b:EVCCID>000000000000000F</v2gci_b:EVCCID></v2gci_b:SessionSetupReq></v2gci_d:Body></v2gci_d:V2G_Message>";
-	         
-	        String input = "<?xml version='1.0' encoding='UTF-8'?><v2gci_dV2G_Message><v2gci_dHeader><v2gci_hSessionInformation><v2gci_tSessionID>0000000000000000</v2gci_tSessionID></v2gci_hSessionInformation></v2gci_dHeader><v2gci_dBody><v2gci_bSessionSetupReq><v2gci_bEVCCID>000000000000000F</v2gci_bEVCCID></v2gci_bSessionSetupReq></v2gci_dBody></v2gci_dV2G_Message>";
-	        byte inputBytes[] = input2.getBytes();
+	        String input= "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><v2gci_d:V2G_Message xmlns:v2gci_b='urn:iso:15118:2:2010:MsgBody' xmlns:xmlsig='http://www.w3.org/2000/09/xmldsig#' xmlns:v2gci_d='urn:iso:15118:2:2010:MsgDef' xmlns:v2gci_t='urn:iso:15118:2:2010:MsgDataTypes' xmlns:v2gci_h='urn:iso:15118:2:2010:MsgHeader'><v2gci_d:Header><v2gci_h:SessionInformation><v2gci_t:SessionID>"+latitude+"</v2gci_t:SessionID></v2gci_h:SessionInformation></v2gci_d:Header><v2gci_d:Body><v2gci_b:SessionSetupReq><v2gci_b:EVCCID>"+longitude+"</v2gci_b:EVCCID></v2gci_b:SessionSetupReq></v2gci_d:Body></v2gci_d:V2G_Message>";
+	        byte inputBytes[] = input.getBytes();
 	        ByteArrayInputStream in = new ByteArrayInputStream(inputBytes); 
 
 	        transmogrifier.encode(new InputSource(in));
 	        
 	        return result.toString();
+	    }catch(Exception e){
+	    	System.out.println("Encoding Exception: "+e);
+	    	return "encoding error";
 	    }
 	//7.  Verify that the streams are closed.
 	    finally {
