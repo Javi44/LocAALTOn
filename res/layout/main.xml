@@ -14,45 +14,49 @@
         android:layout_marginRight="15dip"
         android:layout_marginTop="10dip">
         
-    <EditText
-        android:id="@+id/editServerIp"
-        android:layout_width="0dip"
-        android:layout_weight="2"
-        android:layout_height="fill_parent"
-        android:gravity="top"
-        android:lines="2"
-        android:text="perezj1-web.cs.hut.fi"/>
-    
-    <ImageButton
-            android:id="@+id/buttonServerConnect"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"      
-            android:src="@drawable/con"
-            android:contentDescription="@string/buttonServerConnect"
-            android:background="@drawable/styleconbutton"
-            android:layout_marginLeft="15dip"
-            android:textStyle="bold"/>    
+	    <EditText
+	        android:id="@+id/editServerIp"
+	        android:layout_width="0dip"
+	        android:layout_weight="2"
+	        android:layout_height="fill_parent"
+	        android:lines="2"
+	        android:text="perezj1-web.cs.hut.fi"/>
+	    
+	    <ImageButton
+	            android:id="@+id/buttonServerConnect"
+	            android:layout_width="0dip"
+	            android:layout_weight="1"
+	            android:layout_height="fill_parent"      
+	            android:src="@drawable/con"
+	            android:contentDescription="@string/buttonServerConnect"
+	            android:background="@drawable/styleconbutton"
+	            android:layout_marginLeft="15dip"
+	            android:textStyle="bold"/>    
     </LinearLayout>
-    
+    <ScrollView 
+        android:layout_width="fill_parent"
+    	android:layout_height="0dip"
+    	android:layout_weight="2"
+    	android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="10dip"	>
     <EditText
         android:id="@+id/editTextShowLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:gravity="top"
         android:lines="10"
-        android:text="My location is..." 
-        android:layout_marginLeft="15dip"
-        android:layout_marginRight="15dip"
-        android:layout_marginTop="10dip"/>
+        android:text="My location is..." />
+    </ScrollView>
 	<ProgressBar
         android:id="@+id/batteryBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dip"
+        android:layout_marginTop="10dip"
         android:layout_marginLeft="17dip"
         android:layout_marginRight="17dip"
         android:layout_height="wrap_content" />
+	
     <LinearLayout
         android:layout_marginTop="10dip"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -65,7 +69,6 @@
             android:layout_width="0dip"
             android:layout_height="60dip"
             android:layout_weight="1"
-            android:layout_marginTop="10dip"          
             android:src="@drawable/world"
             android:contentDescription="@string/buttonGetLocation"
             android:background="@color/Green"
@@ -79,7 +82,6 @@
             android:layout_width="0dip"
             android:layout_height="60dip"
             android:layout_weight="1"
-            android:layout_marginTop="10dip"
             android:src="@drawable/cross"
             android:contentDescription="@string/buttonStopUpdates"
             android:background="@color/Red"
@@ -87,28 +89,38 @@
             android:layout_marginRight="17dip"
             android:layout_marginLeft="10dip"/>
     </LinearLayout>
-	<TextView android:id="@+id/textStatus"
-	     android:textSize="7sp"
-	     android:layout_width="fill_parent"
-	     android:layout_height="wrap_content"
-	     android:layout_marginTop="10dip"
-         android:layout_marginLeft="17dip"
-	     android:text="Status changes..." />
-	
-	<TextView android:id="@+id/textSent"
-	     android:textSize="7sp"
-	     android:layout_width="fill_parent"
-	     android:layout_height="wrap_content"
-	     android:layout_marginTop="10dip"
-         android:layout_marginLeft="17dip"
-	     android:text="Messages sent..." />
-	
+	<ScrollView 
+         android:layout_width="fill_parent"
+    	 android:layout_height="0dip"
+    	 android:layout_weight="1"
+    	 android:layout_marginTop="10dip"	>
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+    	 	android:layout_height="fill_parent"
+    	 	android:orientation="vertical" >
+    	 	<TextView android:id="@+id/textStatus"
+			     android:textSize="7sp"
+			     android:layout_width="fill_parent"
+			     android:layout_height="wrap_content"
+			     android:layout_marginTop="10dip"
+		         android:layout_marginLeft="17dip"
+			     android:text="Status changes..." />
+			<TextView android:id="@+id/textSent"
+			     android:textSize="7sp"
+			     android:layout_width="fill_parent"
+			     android:layout_height="wrap_content"
+			     android:layout_marginTop="10dip"
+		         android:layout_marginLeft="17dip"
+			     android:text="Messages sent..." />
+		</LinearLayout>
+	</ScrollView>
 	<ImageButton
 	  android:id="@+id/btnPrefs"
 	  android:layout_width="50dip"
 	  android:layout_height="wrap_content"
 	  android:src="@drawable/conf"
-	  android:layout_marginTop="15dip"
+	  android:layout_marginTop="10dip"
+	  android:layout_marginBottom="10dip"
 	  android:layout_marginLeft="16dip"
 	  android:layout_marginRight="16dip"
 	  android:layout_gravity="right" />

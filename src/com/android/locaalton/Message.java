@@ -2,17 +2,11 @@ package com.android.locaalton;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.StringWriter;
 
-import org.openexi.proc.common.EXIOptionsException;
 import org.openexi.proc.common.GrammarOptions;
 import org.openexi.proc.grammars.GrammarCache;
 import org.openexi.sax.Transmogrifier;
-import org.openexi.sax.TransmogrifierException;
 import org.xml.sax.InputSource;
 import org.xmlpull.v1.XmlSerializer;
 
@@ -56,7 +50,7 @@ public class Message {
 	    } 
 	} 
 	
-	public String encodeEXI(double latitude, double longitude){
+	public String encodeEXI(String inputXML){
 //	    FileInputStream in = null;
 //	    FileOutputStream out = null;
 	    GrammarCache grammarCache;
@@ -70,13 +64,9 @@ public class Message {
 	//1. Instantiate a Transmogrifier
 	        Transmogrifier transmogrifier = new Transmogrifier();
 	        
-	//2. Initialize the input and output streams.
-	       // in = new FileInputStream("/sdcard/locations/"+sourceFile);
-	       // out = new FileOutputStream("/sdcard/locations/"+destinationFile);
-	        
 	//3. Set the schema and EXI options in the Grammar Cache. This example uses default options and no schema.
 	        grammarCache = new GrammarCache(null, options);
-	        
+
 	//4. Set the configuration options in the Transmogrifier. Later examples will show more possible settings.
 	        transmogrifier.setEXISchema(grammarCache);
 	        
@@ -86,8 +76,7 @@ public class Message {
 	
 	//6. Encode the input stream.
 	        
-	        String input= "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><v2gci_d:V2G_Message xmlns:v2gci_b='urn:iso:15118:2:2010:MsgBody' xmlns:xmlsig='http://www.w3.org/2000/09/xmldsig#' xmlns:v2gci_d='urn:iso:15118:2:2010:MsgDef' xmlns:v2gci_t='urn:iso:15118:2:2010:MsgDataTypes' xmlns:v2gci_h='urn:iso:15118:2:2010:MsgHeader'><v2gci_d:Header><v2gci_h:SessionInformation><v2gci_t:SessionID>"+latitude+"</v2gci_t:SessionID></v2gci_h:SessionInformation></v2gci_d:Header><v2gci_d:Body><v2gci_b:SessionSetupReq><v2gci_b:EVCCID>"+longitude+"</v2gci_b:EVCCID></v2gci_b:SessionSetupReq></v2gci_d:Body></v2gci_d:V2G_Message>";
-	        byte inputBytes[] = input.getBytes();
+	        byte inputBytes[] = inputXML.getBytes();
 	        ByteArrayInputStream in = new ByteArrayInputStream(inputBytes); 
 
 	        transmogrifier.encode(new InputSource(in));
@@ -97,12 +86,27 @@ public class Message {
 	    	System.out.println("Encoding Exception: "+e);
 	    	return "encoding error";
 	    }
-	//7.  Verify that the streams are closed.
-	    finally {
-//	        if (in != null)
-//	            in.close();
-//	        if (out != null)
-//	            out.close();
-	    }
 	}
+	
+	public String createXML(double latitude, double longitude){
+		return "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><v2gci_d:V2G_Message xmlns:v2gci_b='urn:iso:15118:2:2010:MsgBody' xmlns:xmlsig='http://www.w3.org/2000/09/xmldsig#' xmlns:v2gci_d='urn:iso:15118:2:2010:MsgDef' xmlns:v2gci_t='urn:iso:15118:2:2010:MsgDataTypes' xmlns:v2gci_h='urn:iso:15118:2:2010:MsgHeader'><v2gci_d:Header><v2gci_h:SessionInformation><v2gci_t:SessionID>"+latitude+"</v2gci_t:SessionID></v2gci_h:SessionInformation></v2gci_d:Header><v2gci_d:Body><v2gci_b:SessionSetupReq><v2gci_b:EVCCID>"+longitude+"</v2gci_b:EVCCID></v2gci_b:SessionSetupReq></v2gci_d:Body></v2gci_d:V2G_Message>";
+	}
+	
+	public String createXmlHeader(String headerContent){
+		return "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><v2gci_d:V2G_Message xmlns:v2gci_b='urn:iso:15118:2:2010:MsgBody' xmlns:xmlsig='http://www.w3.org/2000/09/xmldsig#' xmlns:v2gci_d='urn:iso:15118:2:2010:MsgDef' xmlns:v2gci_t='urn:iso:15118:2:2010:MsgDataTypes' xmlns:v2gci_h='urn:iso:15118:2:2010:MsgHeader'><v2gci_d:Header>"+headerContent+"</v2gci_d:Header>";
+	}
+	
+	public String createXmlBody(String bodyContent){
+		return "<v2gci_d:Body>"+bodyContent+"</v2gci_d:Body></v2gci_d:V2G_Message>";
+	}
+	
+	public String addContentToHeader(double latitude){
+		return "<v2gci_h:SessionInformation><v2gci_t:SessionID>"+latitude+"</v2gci_t:SessionID></v2gci_h:SessionInformation>";
+	}
+	
+	public String addContentToBody(double longitude){
+		return "<v2gci_b:SessionSetupReq><v2gci_b:EVCCID>"+longitude+"</v2gci_b:EVCCID></v2gci_b:SessionSetupReq>";
+	}
+	
+	
 }

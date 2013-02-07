@@ -134,7 +134,6 @@ public class CommTask extends AsyncTask<Void, Object, Boolean> {
             textStatus.setText("There was a connection error.");
         } else {
             Log.i("AsyncTask", "onPostExecute: Completed.");
-//            textStatus.setText("Completed without");
         }
     }
     public void cancelCommTask(){

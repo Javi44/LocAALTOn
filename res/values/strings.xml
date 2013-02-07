@@ -15,9 +15,15 @@
     <string name="titleNetwork">Network</string>
     <string name="titleDistance">Distance</string>
     <string name="titleMinTime">Time</string>
+    <string name="titleBundle">Bundle</string>
+    <string name="titleBundleSize">Bundle size</string>
     <string name="gpsProviderSum">Get locations using the GPS</string>
     <string name="networkProviderSum">Get locations using the network</string>
     <string name="distanceSum">Choose distance between samples (m)</string>
     <string name="minTimeSum">Choose minimum time between samples (s)</string>
+    <string name="bundleSum">Activate it to send messages into bundles of 2 or more messages</string>
+    <string name="bundleSizeSum">Choose the number of messages per bundle</string>
+    <string name="providerCategory">Location provider settings</string>
+    <string name="bundleCategory">Bundle settings</string>
     
 </resources>

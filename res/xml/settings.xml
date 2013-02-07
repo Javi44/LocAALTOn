@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceScreen
-    	android:key="prefProviderScreen"
-        android:title="@string/prefProvider"
-        android:persistent="false"
-        android:summary="@string/prefProviderSum">   
-	    <CheckBoxPreference
-	        android:key="gpsUpdates"
-	        android:title="@string/titleGPS"
-	        android:summary="@string/gpsProviderSum"
-	        android:defaultValue="false" />
-	    <CheckBoxPreference
-	        android:key="networkUpdates"
-	        android:title="@string/titleNetwork"
-	        android:summary="@string/networkProviderSum"
-	        android:defaultValue="false" />
-	</PreferenceScreen>
-	<EditTextPreference
-	    		android:key="prefDistance"
-                android:title="@string/titleDistance"
-                android:summary="@string/distanceSum"/>
-	<EditTextPreference
-	    		android:key="prefMinTime"
-                android:title="@string/titleMinTime"
-                android:summary="@string/minTimeSum"/>
+    <PreferenceCategory android:title="@string/providerCategory" >
+	    <PreferenceScreen
+	    	android:key="prefProviderScreen"
+	        android:title="@string/prefProvider"
+	        android:persistent="false"
+	        android:summary="@string/prefProviderSum">   
+		    <CheckBoxPreference
+		        android:key="gpsUpdates"
+		        android:title="@string/titleGPS"
+		        android:summary="@string/gpsProviderSum"
+		        android:defaultValue="false" />
+		    <CheckBoxPreference
+		        android:key="networkUpdates"
+		        android:title="@string/titleNetwork"
+		        android:summary="@string/networkProviderSum"
+		        android:defaultValue="false" />
+		</PreferenceScreen>
+		<EditTextPreference
+		    		android:key="prefDistance"
+	                android:title="@string/titleDistance"
+	                android:summary="@string/distanceSum"/>
+		<EditTextPreference
+		    		android:key="prefMinTime"
+	                android:title="@string/titleMinTime"
+	                android:summary="@string/minTimeSum"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/bundleCategory" >
+		<CheckBoxPreference
+		        android:key="bundlesEnabled"
+		        android:title="@string/titleBundle"
+		        android:summary="@string/bundleSum"
+		        android:defaultValue="false" />
+		<EditTextPreference
+		    		android:key="prefBundleSize"
+	                android:title="@string/titleBundleSize"
+	                android:summary="@string/bundleSizeSum"/>
+	</PreferenceCategory>
 </PreferenceScreen>

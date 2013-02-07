@@ -201,20 +201,26 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060001;
+        public static final int bundleCategory=0x7f060018;
+        public static final int bundleSizeSum=0x7f060016;
+        public static final int bundleSum=0x7f060015;
         public static final int buttonGetLocation=0x7f060007;
         public static final int buttonServerConnect=0x7f060006;
         public static final int buttonStopUpdates=0x7f060008;
         public static final int debug=0x7f060005;
-        public static final int distanceSum=0x7f060011;
+        public static final int distanceSum=0x7f060013;
         public static final int gpsButton=0x7f060002;
-        public static final int gpsProviderSum=0x7f06000f;
+        public static final int gpsProviderSum=0x7f060011;
         public static final int hello=0x7f060000;
-        public static final int minTimeSum=0x7f060012;
+        public static final int minTimeSum=0x7f060014;
         public static final int networkButton=0x7f060003;
-        public static final int networkProviderSum=0x7f060010;
+        public static final int networkProviderSum=0x7f060012;
         public static final int prefProvider=0x7f060009;
         public static final int prefProviderSum=0x7f06000a;
+        public static final int providerCategory=0x7f060017;
         public static final int stopButton=0x7f060004;
+        public static final int titleBundle=0x7f06000f;
+        public static final int titleBundleSize=0x7f060010;
         public static final int titleDistance=0x7f06000d;
         public static final int titleGPS=0x7f06000b;
         public static final int titleMinTime=0x7f06000e;

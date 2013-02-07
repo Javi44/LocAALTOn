@@ -20,12 +20,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -61,6 +57,9 @@ public class LocAALTOnActivity extends Activity {
     private SocketIO socket = null;
     private CommTask commTask;
     private Message msg = new Message();
+    private int currentBundleSize = 0;
+    private String headerForServer = "";
+    private String bodyForServer = "";
   
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -96,7 +95,6 @@ public class LocAALTOnActivity extends Activity {
 		{		
 			try
 			{
-				//fOut = new FileOutputStream("/sdcard/LocationData.txt",true);
 				fOut = new FileOutputStream("/sdcard/locations/"+currentDateTimeString+".txt",true);
 				myOutWriter= new OutputStreamWriter(fOut);			
 			}
@@ -266,9 +264,32 @@ public class LocAALTOnActivity extends Activity {
 					}
 					if(commTask.isConnected())
 					{
-						String newLocation = msg.encodeEXI(latitude,longitude);
-						commTask.SendDataToServer("location", newLocation);
-						textSent.setText(notDecoratedS+"\n"+newLocation);
+						String hfs = msg.addContentToHeader(latitude);
+						String bfs = msg.addContentToBody(longitude);
+						
+						if(bundlesEnabled())
+						{
+							headerForServer = headerForServer+hfs;
+							bodyForServer = bodyForServer+bfs;
+							if(currentBundleSize == (getBundleSettings()-1))
+							{	
+								String fullXML = msg.createXmlHeader(headerForServer)+msg.createXmlBody(bodyForServer);
+								String fullEXI =  msg.encodeEXI(fullXML);
+								commTask.SendDataToServer("location", fullEXI);
+								textSent.setText(notDecoratedS+"\n"+fullXML+"\n\n"+fullEXI);
+								headerForServer = "";
+								bodyForServer = "";
+								currentBundleSize = 0;
+							}else{
+								currentBundleSize +=1;
+							}
+						}else{
+							String fullXML = msg.createXML(latitude,longitude);
+							String fullEXI =  msg.encodeEXI(fullXML);
+							commTask.SendDataToServer("location", fullEXI);
+							textSent.setText(notDecoratedS+"\n"+fullXML+"\n\n"+fullEXI);
+						}
+						
 					}
 				}
 				else
@@ -290,6 +311,12 @@ public class LocAALTOnActivity extends Activity {
     {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LocAALTOnActivity.this);
     	return prefs.getBoolean("networkUpdates", false);
+    };
+    
+    private boolean bundlesEnabled()
+    {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LocAALTOnActivity.this);
+    	return prefs.getBoolean("bundlesEnabled", false);
     };
     
     private int getDistanceSettings()
@@ -316,6 +343,23 @@ public class LocAALTOnActivity extends Activity {
     		t = 1;
     	}
     	return t*1000;
+    };
+    
+    private int getBundleSettings()
+    {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LocAALTOnActivity.this);
+    	int b;
+    	try
+    	{
+    		b = Integer.parseInt(prefs.getString("prefBundleSize", "2"));
+    		if(b<2)
+    		{
+    			b=2;
+    		}
+    	}catch(Exception e){
+    		b = 2;
+    	}
+    	return b;
     };
     
     
