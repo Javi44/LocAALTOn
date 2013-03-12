@@ -168,9 +168,8 @@ public final class R {
         public static final int ic_menu_loc=0x7f02000b;
         public static final int light=0x7f02000c;
         public static final int map=0x7f02000d;
-        public static final int styleconbutton=0x7f02000e;
-        public static final int tick=0x7f02000f;
-        public static final int world=0x7f020010;
+        public static final int tick=0x7f02000e;
+        public static final int world=0x7f02000f;
     }
     public static final class id {
         public static final int batteryBar=0x7f090003;
