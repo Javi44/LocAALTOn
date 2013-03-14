@@ -449,9 +449,16 @@ class IOConnection implements IOCallback {
 		if (getState() == STATE_READY)
 			try {
 				logger.info("> " + text);
+				String[] ciphersuites = sslSocketFactory.getSupportedCipherSuites();
+				int i;
+				for(i=0;i<ciphersuites.length;i++)
+				{
+					logger.info("SUPPORTED CIPHER SUITE "+i+" >>>>> " + ciphersuites[i]);
+				}
 				transport.send(text);
 			} catch (Exception e) {
 				logger.info("IOEx: saving "+e);
+				e.printStackTrace();
 				outputBuffer.add(text);
 			}
 		else {

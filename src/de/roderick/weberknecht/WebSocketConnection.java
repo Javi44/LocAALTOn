@@ -20,11 +20,12 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.Socket;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 
@@ -36,7 +37,7 @@ public class WebSocketConnection
 	
 	private volatile boolean connected = false;
 	
-	private Socket socket = null;
+	private SSLSocket socket = null;
 	private InputStream input = null;
 	private BufferedOutputStream output = null;
 	
@@ -225,21 +226,23 @@ public class WebSocketConnection
 	}
 	
 
-	private Socket createSocket()
+	private SSLSocket createSocket()
 			throws WebSocketException
 	{
 		String scheme = url.getScheme();
 		String host = url.getHost();
 		int port = url.getPort();
-		
-		Socket socket = null;
+		//modified to use SSLSocket, it will never enter into the first case.
+		SSLSocket socket = null;
 		
 		if (scheme != null && scheme.equals("ws")) {
 			if (port == -1) {
 				port = 80;
 			}
 			try {
-				socket = new Socket(host, port);
+				socket = (SSLSocket) sslSocketFactory.createSocket(host, port);
+			    String[] suites = socket.getSupportedCipherSuites();
+			    socket.setEnabledCipherSuites(suites);
 			}
 			catch (UnknownHostException uhe) {
 				throw new WebSocketException("unknown host: " + host, uhe);
@@ -253,7 +256,9 @@ public class WebSocketConnection
 				port = 443;
 			}
 			try {
-				socket = sslSocketFactory.createSocket(host, port);
+				socket = (SSLSocket) sslSocketFactory.createSocket(host, port);
+				 String[] suites = socket.getSupportedCipherSuites();
+				 socket.setEnabledCipherSuites(suites);
 			}
 			catch (UnknownHostException uhe) {
 				throw new WebSocketException("unknown host: " + host, uhe);

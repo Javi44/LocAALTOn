@@ -5,10 +5,10 @@ import io.socket.IOCallback;
 import io.socket.SocketIO;
 import io.socket.SocketIOException;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.net.ssl.SSLContext;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +43,20 @@ public class CommTask extends AsyncTask<Void, Object, Boolean> {
     protected void onPreExecute()
     {
         Log.i("AsyncTask", "onPreExecute");
+        
+        if (Integer.valueOf(android.os.Build.VERSION.SDK_INT) >= 9) {
+            try {
+                // StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.LAX);
+                   Class<?> strictModeClass = Class.forName("android.os.StrictMode", true, Thread.currentThread()
+                                .getContextClassLoader());
+                   Class<?> threadPolicyClass = Class.forName("android.os.StrictMode$ThreadPolicy", true, Thread.currentThread()
+                                .getContextClassLoader());
+                   Field laxField = threadPolicyClass.getField("LAX");
+                   Method setThreadPolicyMethod = strictModeClass.getMethod("setThreadPolicy", threadPolicyClass);
+                        setThreadPolicyMethod.invoke(strictModeClass, laxField.get(null));
+            } 
+            catch (Exception e) { }
+        }
     }
 
     @Override
@@ -52,8 +66,9 @@ public class CommTask extends AsyncTask<Void, Object, Boolean> {
         try 
         {
             Log.i("ClientActivity", "C: Connecting...");
+            
+            //SocketIO.setDefaultSSLSocketFactory(SSLContext.getInstance("Default"));
             socket = new SocketIO("https://"+this.serverIpAddress+":3000/");
-            //var socket = io.connect('https://localhost', {secure: true});
             socket.connect(new IOCallback() {
             	
                 @Override
@@ -78,7 +93,7 @@ public class CommTask extends AsyncTask<Void, Object, Boolean> {
                 public void onError(SocketIOException socketIOException)
                 {
                 	Log.i("AsyncTask", "an error occured while trying to connect");
-                    //socketIOException.printStackTrace();
+                    socketIOException.printStackTrace();
                     String update[] = {"UNABLE TO REACH THE SERVER \n Check whether the mobile phone has access to internet or \n whether the communication protocol http/https is correct"};
                 	publishProgress(update);
                 	cancel(true);		//to cancel the AsyncTask

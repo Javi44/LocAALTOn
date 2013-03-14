@@ -196,26 +196,25 @@ public class LocAALTOnActivity extends Activity {
     {
         @Override
         public void onClick(View v)
-        {
-        	commTask.SendDataToServer("location", "TEST");
-//        	String toastMsg = "";
-//    		if(gpsFlag)
-//    		{
-//    			locManager.removeUpdates(locListener);
-//    			gpsFlag = false;
-//    			toastMsg = "GPS";
-//    		}
-//    		if(netFlag)
-//    		{
-//    			locManager.removeUpdates(locListenerNET);
-//    			netFlag = false;
-//    			if(toastMsg.equals("")){
-//        			toastMsg = "Network";
-//    			}else{
-//    				toastMsg = toastMsg+" & network";
-//    			}
-//    		}
-//    		if(!toastMsg.equals(""))Toast.makeText(getBaseContext(),toastMsg+" updates stopped",Toast.LENGTH_SHORT).show();
+        {    	
+        	String toastMsg = "";
+    		if(gpsFlag)
+    		{
+    			locManager.removeUpdates(locListener);
+    			gpsFlag = false;
+    			toastMsg = "GPS";
+    		}
+    		if(netFlag)
+    		{
+    			locManager.removeUpdates(locListenerNET);
+    			netFlag = false;
+    			if(toastMsg.equals("")){
+        			toastMsg = "Network";
+    			}else{
+    				toastMsg = toastMsg+" & network";
+    			}
+    		}
+    		if(!toastMsg.equals(""))Toast.makeText(getBaseContext(),toastMsg+" updates stopped",Toast.LENGTH_SHORT).show();
         }
     };
 	
