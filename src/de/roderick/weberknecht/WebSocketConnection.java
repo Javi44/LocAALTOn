@@ -20,11 +20,13 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+//import java.net.Socket;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -38,6 +40,7 @@ public class WebSocketConnection
 	private volatile boolean connected = false;
 	
 	private SSLSocket socket = null;
+//	private Socket socket = null;
 	private InputStream input = null;
 	private BufferedOutputStream output = null;
 	
@@ -113,7 +116,7 @@ public class WebSocketConnection
 					}
 				}
 				else if (buffer[pos-1] == 0x0A && buffer[pos-2] == 0x0D) {
-					String line = new String(buffer, "ISO-8859-1");
+					String line = new String(buffer, "UTF-8");
 					if (line.trim().equals("")) {
 						header = false;
 					}
@@ -161,7 +164,7 @@ public class WebSocketConnection
 		
 		try {
 			output.write(0x00);
-			output.write(data.getBytes(("ISO-8859-1")));
+			output.write(data.getBytes(("UTF-8")));
 			output.write(0xff);
 			output.flush();
 		}
@@ -232,8 +235,9 @@ public class WebSocketConnection
 		String scheme = url.getScheme();
 		String host = url.getHost();
 		int port = url.getPort();
-		//modified to use SSLSocket, it will never enter into the first case.
+		//modified to use SSLSocket, it will never enter into the no secure case.
 		SSLSocket socket = null;
+		
 		
 		if (scheme != null && scheme.equals("ws")) {
 			if (port == -1) {
@@ -273,6 +277,52 @@ public class WebSocketConnection
 		
 		return socket;
 	}
+	
+	// createSocket() for using no secure websockets
+//	private Socket createSocket()
+//		    throws WebSocketException
+//		{
+//		String scheme = url.getScheme();
+//		String host = url.getHost();
+//		int port = url.getPort();
+//		
+//		Socket socket = null;
+//		
+//		if (scheme != null && scheme.equals("ws")) {
+//		    if (port == -1) {
+//		            port = 80;
+//		    }
+//		    try {
+//		            socket = new Socket(host, port);
+//		    }
+//		    catch (UnknownHostException uhe) {
+//		            throw new WebSocketException("unknown host: " + host, uhe);
+//		    }
+//		    catch (IOException ioe) {
+//		            throw new WebSocketException("error while creating socket to " + url, ioe);
+//		    }
+//		}
+//		else if (scheme != null && scheme.equals("wss")) {
+//		    if (port == -1) {
+//		            port = 443;
+//		    }
+//		    try {
+//		            SocketFactory factory = SSLSocketFactory.getDefault();
+//		            socket = factory.createSocket(host, port);
+//		    }
+//		    catch (UnknownHostException uhe) {
+//		            throw new WebSocketException("unknown host: " + host, uhe);
+//		    }
+//		    catch (IOException ioe) {
+//		            throw new WebSocketException("error while creating secure socket to " + url, ioe);
+//		    }
+//		}
+//		else {
+//		    throw new WebSocketException("unsupported protocol: " + scheme);
+//		}
+//		
+//		return socket;
+//	}
 	
 	
 	private void closeStreams()

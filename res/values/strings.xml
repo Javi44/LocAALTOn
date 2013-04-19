@@ -17,13 +17,18 @@
     <string name="titleMinTime">Time</string>
     <string name="titleBundle">Bundle</string>
     <string name="titleBundleSize">Bundle size</string>
+    <string name="titleTransport">Transport Protocol</string>
+    <string name="titleDeltaComp">Activate delta compression</string>
     <string name="gpsProviderSum">Get locations using the GPS</string>
     <string name="networkProviderSum">Get locations using the network</string>
     <string name="distanceSum">Choose distance between samples (m)</string>
     <string name="minTimeSum">Choose minimum time between samples (s)</string>
     <string name="bundleSum">Activate it to send messages into bundles of 2 or more messages</string>
     <string name="bundleSizeSum">Choose the number of messages per bundle</string>
+    <string name="transportSum">Select the transport used for the communication</string>
+    <string name="deltaCompSum">When enabled the application only sends the difference with the last value instead of the whole value</string>
     <string name="providerCategory">Location provider settings</string>
     <string name="bundleCategory">Bundle settings</string>
-    
+    <string name="transportCategory">Transport protocol settings</string>
+    <string name="deltaCompCategory">Delta compression settings</string>
 </resources>

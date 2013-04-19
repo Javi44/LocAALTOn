@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/transportCategory" >
+        <ListPreference
+			android:key="transportSelected"
+			android:title="@string/titleTransport" 
+			android:entries="@array/transportsEntries"
+			android:entryValues="@array/transportsValues"
+			android:summary="@string/transportSum"
+			android:defaultValue="websocket" />
+	</PreferenceCategory>
     <PreferenceCategory android:title="@string/providerCategory" >
 	    <PreferenceScreen
 	    	android:key="prefProviderScreen"
@@ -37,4 +46,12 @@
 	                android:title="@string/titleBundleSize"
 	                android:summary="@string/bundleSizeSum"/>
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/deltaCompCategory" >
+		<CheckBoxPreference
+		        android:key="deltaCompEnabled"
+		        android:title="@string/titleDeltaComp"
+		        android:summary="@string/deltaCompSum"
+		        android:defaultValue="false"/>
+	</PreferenceCategory>
+	
 </PreferenceScreen>

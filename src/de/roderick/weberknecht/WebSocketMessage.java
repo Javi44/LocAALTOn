@@ -37,7 +37,7 @@ public class WebSocketMessage
 			message[i] = this.message[i];
 		}
 		try {
-			return new String(message, "ISO-8859-1");
+			return new String(message, "UTF-8");
 		}
 		catch (UnsupportedEncodingException uee) {
 			return null;

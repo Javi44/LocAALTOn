@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="transportsEntries">        
+        <item>Websockets</item>
+        <item>HTTPS</item>
+        <item>TCP</item>
+    </string-array>
+    <string-array name="transportsValues">        
+        <item>websocket</item>
+        <item>https</item>
+        <item>tcp</item>
+    </string-array>
+</resources>

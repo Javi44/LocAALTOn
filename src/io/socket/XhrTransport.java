@@ -53,7 +53,7 @@ class XhrTransport implements IOTransport {
 	 */
 	private class PollThread extends Thread {
 
-		private static final String CHARSET = "ISO-8859-1";
+		private static final String CHARSET = "UTF-8";
 
 		/**
 		 * Instantiates a new receiver thread.
